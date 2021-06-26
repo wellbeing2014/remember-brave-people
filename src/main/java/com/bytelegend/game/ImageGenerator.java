@@ -1,5 +1,7 @@
 package com.bytelegend.game;
 
+import com.googlecode.pngtastic.PngtasticOptimizer;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -64,6 +66,18 @@ abstract class ImageGenerator {
             throw new RuntimeException(e);
         }
     }
+    protected void compressInPlace(File image) {
+        new PngtasticOptimizer(
+                image.getParentFile().getAbsolutePath(),
+                new String []{image.getAbsolutePath()},
+                ".png",
+                true,
+                null,
+                null,
+                null,
+                "debug"
+        );
+    }
 }
 
 class IncrementalImageGenerator extends ImageGenerator {
@@ -72,13 +86,14 @@ class IncrementalImageGenerator extends ImageGenerator {
     }
 
     void generate(TileDataDiff diff) throws Exception {
-        downloader.download(PUBLIC_BRAVE_PEOPLE_IMAGE_URL, environment.getInputBravePeopleImage());
+//        downloader.download(PUBLIC_BRAVE_PEOPLE_IMAGE_URL, environment.getInputBravePeopleImage());
 
         BufferedImage bufferedImage = ImageIO.read(environment.getInputBravePeopleImage());
         Graphics graphics = bufferedImage.getGraphics();
         writeTile(graphics, diff.getChangedTile(), downloader.downloadAvatars(Arrays.asList(diff.getChangedTile())));
         graphics.dispose();
         ImageIO.write(bufferedImage, "PNG", environment.getOutputBravePeopleImage());
+        compressInPlace(environment.getOutputBravePeopleImage());
     }
 }
 
@@ -103,5 +118,6 @@ class FullImageGenerator extends ImageGenerator {
         inputTiles.forEach(tile -> writeTile(graphics, tile, usernameToAvatars));
         graphics.dispose();
         ImageIO.write(bufferedImage, "PNG", environment.getOutputBravePeopleImage());
+        compressInPlace(environment.getOutputBravePeopleImage());
     }
 }

@@ -17,6 +17,7 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.1")
     implementation("com.aliyun.oss:aliyun-sdk-oss:3.8.0")
     implementation("commons-io:commons-io:2.8.0")
+    implementation("com.github.depsypher:pngtastic:1.5")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.7.0")
     testImplementation("org.hamcrest:hamcrest:2.2")
